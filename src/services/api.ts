@@ -59,6 +59,16 @@ export async function getPropBetsForEvent(
   return apiRequest<DBPropBet[]>(`/prop-bets/event/${eventId}`);
 }
 
+export async function getPropBetsForTeam(teamId: string): Promise<DBPropBet[]> {
+  return apiRequest<DBPropBet[]>(`/prop-bets/team/${teamId}`);
+}
+
+export async function getPropBetsForAthlete(
+  athleteId: string
+): Promise<DBPropBet[]> {
+  return apiRequest<DBPropBet[]>(`/prop-bets/athlete/${athleteId}`);
+}
+
 export async function scrape(): Promise<void> {
   return apiRequest<void>(`/scrape`);
 }
