@@ -1,30 +1,36 @@
-import { DBOdds, DBEvent } from "../types";
+import { DBPropBet, DBEvent } from "@/types";
 
 interface StatsSummaryProps {
   events: DBEvent[];
-  odds: DBOdds[];
+  propBets: DBPropBet[];
 }
 
-export default function StatsSummary({ events, odds }: StatsSummaryProps) {
+export default function StatsSummary({ events, propBets }: StatsSummaryProps) {
   const totalEvents = events.length;
-  const totalOdds = odds.length;
+  const totalPropBets = propBets.length;
 
-  const sportsCount = events.reduce((acc, event) => {
-    acc[event.sport] = (acc[event.sport] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  const sportsCount = events.reduce(
+    (acc: Record<string, number>, event: DBEvent) => {
+      acc[event.sport] = (acc[event.sport] || 0) + 1;
+      return acc;
+    },
+    {}
+  );
 
-  const leaguesCount = events.reduce((acc, event) => {
-    acc[event.league] = (acc[event.league] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  const leaguesCount = events.reduce(
+    (acc: Record<string, number>, event: DBEvent) => {
+      acc[event.league] = (acc[event.league] || 0) + 1;
+      return acc;
+    },
+    {}
+  );
 
   const upcomingEvents = events.filter(
-    (event) => new Date(event.date) > new Date()
+    (event: DBEvent) => new Date(event.date) > new Date()
   ).length;
 
-  const eventsWithOdds = events.filter((event) =>
-    odds.some((oddsRecord) => oddsRecord.event_id === event.id)
+  const eventsWithPropBets = events.filter((event: DBEvent) =>
+    propBets.some((bet: DBPropBet) => bet.event_id === event.id)
   ).length;
 
   return (
@@ -45,10 +51,10 @@ export default function StatsSummary({ events, odds }: StatsSummaryProps) {
 
         <div className="text-center">
           <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-            {totalOdds}
+            {totalPropBets}
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            Total Odds
+            Total Prop Bets
           </div>
         </div>
 
@@ -63,10 +69,10 @@ export default function StatsSummary({ events, odds }: StatsSummaryProps) {
 
         <div className="text-center">
           <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-            {eventsWithOdds}
+            {eventsWithPropBets}
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            Events with Odds
+            Events with Prop Bets
           </div>
         </div>
       </div>

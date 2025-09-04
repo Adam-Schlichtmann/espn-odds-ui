@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { DBEvent, DBOdds } from "../types";
-import { apiService } from "../services/api";
+import { DBEvent, DBPropBet } from "../types";
+import { getEvents, scrape } from "../services/api";
 import EventCard from "../components/EventCard";
 import EventFilters from "../components/EventFilters";
 import StatsSummary from "../components/StatsSummary";
@@ -11,7 +11,6 @@ import ErrorMessage from "../components/ErrorMessage";
 
 export default function Home() {
   const [events, setEvents] = useState<DBEvent[]>([]);
-  const [odds, setOdds] = useState<DBOdds[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,13 +28,8 @@ export default function Home() {
       setLoading(true);
       setError(null);
 
-      const [eventsData, oddsData] = await Promise.all([
-        apiService.getEvents(),
-        apiService.getAllOdds(),
-      ]);
-
+      const eventsData = await getEvents();
       setEvents(eventsData);
-      setOdds(oddsData);
     } catch {
       setError(
         "Failed to fetch data. Please check if the API server is running on localhost:3000."
@@ -73,11 +67,6 @@ export default function Home() {
       }
     });
 
-  // Get odds for each event
-  const getEventOdds = (eventId: string) => {
-    return odds.filter((oddsRecord) => oddsRecord.event_id === eventId);
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -110,10 +99,9 @@ export default function Home() {
             View sports events and betting odds in real-time
           </p>
         </div>
-
-        <button onClick={apiService.scrape}>PRESS ME</button>
+        <button onClick={scrape}>PRESS ME</button>
         {/* Stats Summary */}
-        <StatsSummary events={events} odds={odds} />
+        <StatsSummary events={events} propBets={[]} />
 
         {/* Filters */}
         <EventFilters
@@ -138,11 +126,7 @@ export default function Home() {
         {filteredAndSortedEvents.length > 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredAndSortedEvents.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                odds={getEventOdds(event.id)}
-              />
+              <EventCard key={event.id} event={event} />
             ))}
           </div>
         ) : (
