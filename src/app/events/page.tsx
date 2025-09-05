@@ -1,72 +1,55 @@
 "use client";
-import { useState, useEffect } from "react";
-import { DBEvent, DBPropBet } from "../../types";
-import { getEvents, scrape } from "../../services/api";
+import { useState } from "react";
+import { scrape } from "../../services/api";
 import EventCard from "../../components/EventCard";
 import EventFilters from "../../components/EventFilters";
 import StatsSummary from "../../components/StatsSummary";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorMessage from "../../components/ErrorMessage";
+import { useGetEventsQuery } from "@/generated/graphql";
 
 export default function EventsTab(props: { tabKey: string }) {
-  const [events, setEvents] = useState<DBEvent[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedSport, setSelectedSport] = useState("");
   const [selectedLeague, setSelectedLeague] = useState("");
   const [sortBy, setSortBy] = useState("startDate");
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { data, loading, error } = useGetEventsQuery();
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const eventsData = await getEvents();
-      setEvents(eventsData);
-    } catch {
-      setError(
-        "Failed to fetch data. Please check if the API server is running on localhost:3000."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const sports = [...new Set(data?.events.map((event) => event.sport))].sort();
+  const leagues = [
+    ...new Set(data?.events.map((event) => event.league)),
+  ].sort();
 
-  const sports = [...new Set(events.map((event) => event.sport))].sort();
-  const leagues = [...new Set(events.map((event) => event.league))].sort();
-
-  const filteredAndSortedEvents = events
-    .filter((event) => {
-      if (selectedSport && event.sport !== selectedSport) return false;
-      if (selectedLeague && event.league !== selectedLeague) return false;
-      return true;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case "startDate":
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
-        case "eventName":
-          return (a.name || a.short_name || "").localeCompare(
-            b.name || b.short_name || ""
-          );
-        case "sport":
-          return a.sport.localeCompare(b.sport);
-        case "league":
-          return a.league.localeCompare(b.league);
-        default:
-          return 0;
-      }
-    });
+  const filteredAndSortedEvents =
+    data?.events
+      .filter((event) => {
+        if (selectedSport && event.sport !== selectedSport) return false;
+        if (selectedLeague && event.league !== selectedLeague) return false;
+        return true;
+      })
+      .sort((a, b) => {
+        switch (sortBy) {
+          case "startDate":
+            return new Date(a.date).getTime() - new Date(b.date).getTime();
+          case "eventName":
+            return (a.name || a.short_name || "").localeCompare(
+              b.name || b.short_name || ""
+            );
+          case "sport":
+            return a.sport.localeCompare(b.sport);
+          case "league":
+            return a.league.localeCompare(b.league);
+          default:
+            return 0;
+        }
+      }) ?? [];
 
   if (loading) {
     return <LoadingSpinner />;
   }
 
   if (error) {
-    return <ErrorMessage message={error} onRetry={fetchData} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (
@@ -80,7 +63,7 @@ export default function EventsTab(props: { tabKey: string }) {
         </p>
       </div>
       <button onClick={scrape}>PRESS ME</button>
-      <StatsSummary events={events} propBets={[]} />
+      <StatsSummary events={data?.events ?? []} propBets={[]} />
       <EventFilters
         sports={sports}
         leagues={leagues}
@@ -93,7 +76,8 @@ export default function EventsTab(props: { tabKey: string }) {
       />
       <div className="mb-6">
         <p className="text-gray-600 dark:text-gray-400">
-          Showing {filteredAndSortedEvents.length} of {events.length} events
+          Showing {filteredAndSortedEvents.length} of {data?.events.length}{" "}
+          events
         </p>
       </div>
       {filteredAndSortedEvents.length > 0 ? (

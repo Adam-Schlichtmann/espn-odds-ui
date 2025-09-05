@@ -1,7 +1,8 @@
-import { DBEvent } from "@/types";
+import { Event } from "@/generated/graphql";
+import Link from "next/link";
 
 interface EventCardProps {
-  event: DBEvent;
+  event: Event;
 }
 
 export default function EventCard({ event }: EventCardProps) {
@@ -58,23 +59,24 @@ export default function EventCard({ event }: EventCardProps) {
   // };
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-            {event.name || event.short_name || "Unnamed Event"}
-          </h3>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {event.sport}  {event.league}
+    <Link href={`/events/${event.id}`} passHref legacyBehavior>
+      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+              {event.name || event.short_name || "Unnamed Event"}
+            </h3>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {event.sport}  {event.league}
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-sm font-medium text-gray-900 dark:text-white">
+              {formatDate(event.date)}
+            </div>
           </div>
         </div>
-        <div className="text-right">
-          <div className="text-sm font-medium text-gray-900 dark:text-white">
-            {formatDate(event.date)}
-          </div>
-        </div>
-      </div>
-      {/* {propBets && propBets.length > 0 ? (
+        {/* {propBets && propBets.length > 0 ? (
         <div>
           <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Prop Bets ({propBets.length})
@@ -88,6 +90,7 @@ export default function EventCard({ event }: EventCardProps) {
           No prop bets available
         </div>
       )} */}
-    </div>
+      </div>
+    </Link>
   );
 }

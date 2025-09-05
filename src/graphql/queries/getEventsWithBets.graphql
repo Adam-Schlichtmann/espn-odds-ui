@@ -1,0 +1,53 @@
+query GetEventsWithBets(
+  $seasonType: Int
+  $eventsId: ID
+  $week: Int
+  $league: String
+  $season: Int
+  $sport: String
+  $athleteId: String
+  $teamId: String
+  $typeId: String
+) {
+  events(
+    season_type: $seasonType
+    id: $eventsId
+    week: $week
+    league: $league
+    season: $season
+    sport: $sport
+  ) {
+    id
+    date
+    league
+    name
+    sport
+    short_name
+    venue
+    venue_address
+    season
+    season_type
+    week
+    created_at
+    updated_at
+    propBets(
+      athlete_id: $athleteId
+      team_id: $teamId
+      league: $league
+      type_id: $typeId
+      season_type: $seasonType
+    ) {
+      id
+      league
+      sport
+      type_name
+      type_id
+      target_value
+      odds_last_updated
+      over_american
+      over_value
+      under_american
+      under_value
+    }
+  }
+}

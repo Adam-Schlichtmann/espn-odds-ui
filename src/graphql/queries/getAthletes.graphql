@@ -1,0 +1,40 @@
+query GetAthletes(
+  $athletesId: ID
+  $teamId: String
+  $league: String
+  $sport: String
+  $positionName: String
+) {
+  athletes(
+    id: $athletesId
+    team_id: $teamId
+    league: $league
+    sport: $sport
+    position_name: $positionName
+  ) {
+    id
+    age
+    birth_date
+    debut_year
+    display_name
+    first_name
+    height_display
+    height
+    jersey
+    last_name
+    league
+    position_abbreviation
+    position_id
+    position_name
+    short_name
+    slug
+    sport
+    status_id
+    status_name
+    team_id
+    weight_display
+    weight
+    created_at
+    updated_at
+  }
+}

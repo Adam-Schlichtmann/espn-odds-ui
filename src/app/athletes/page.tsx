@@ -1,32 +1,20 @@
 "use client";
-import { useEffect, useState } from "react";
-import { DBAthlete } from "../../types";
-import { getAthletes } from "../../services/api";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorMessage from "../../components/ErrorMessage";
 import AthleteCard from "../../components/AthleteCard";
+import { useGetAthletesQuery } from "@/generated/graphql";
 
 export default function AthletesTab(props: { tabKey: string }) {
-  const [athletes, setAthletes] = useState<DBAthlete[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    getAthletes()
-      .then(setAthletes)
-      .catch(() => setError("Failed to fetch athletes."))
-      .finally(() => setLoading(false));
-  }, []);
-
+  const { data, loading, error } = useGetAthletesQuery();
   if (loading) return <LoadingSpinner />;
-  if (error) return <ErrorMessage message={error} />;
+  if (error) return <ErrorMessage message={error.message} />;
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Athletes</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {athletes.map((athlete) => (
-          <AthleteCard key={athlete.id} athlete={athlete} />
+        {data?.athletes.map((a) => (
+          <AthleteCard key={a.id} athlete={a} />
         ))}
       </div>
     </div>

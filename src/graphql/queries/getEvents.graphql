@@ -1,0 +1,31 @@
+query GetEvents(
+  $seasonType: Int
+  $eventsId: ID
+  $week: Int
+  $league: String
+  $season: Int
+  $sport: String
+) {
+  events(
+    season_type: $seasonType
+    id: $eventsId
+    week: $week
+    league: $league
+    season: $season
+    sport: $sport
+  ) {
+    id
+    date
+    league
+    name
+    sport
+    short_name
+    venue
+    venue_address
+    season
+    season_type
+    week
+    created_at
+    updated_at
+  }
+}
