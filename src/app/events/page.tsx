@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { scrape } from "../../services/api";
 import EventCard from "../../components/EventCard";
 import EventFilters from "../../components/EventFilters";
 import StatsSummary from "../../components/StatsSummary";
@@ -62,7 +61,6 @@ export default function EventsTab(props: { tabKey: string }) {
           View sports events and betting odds in real-time
         </p>
       </div>
-      <button onClick={scrape}>PRESS ME</button>
       <StatsSummary events={data?.events ?? []} propBets={[]} />
       <EventFilters
         sports={sports}

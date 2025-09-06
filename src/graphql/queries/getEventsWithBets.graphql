@@ -48,6 +48,12 @@ query GetEventsWithBets(
       over_value
       under_american
       under_value
+      athlete {
+        display_name
+      }
+      team {
+        nickname
+      }
     }
   }
 }

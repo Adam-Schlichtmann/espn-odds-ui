@@ -1,0 +1,25 @@
+query GetTeams(
+  $teamsId: ID
+  $league: String
+  $sport: String
+  $isActive: Boolean
+) {
+  teams(id: $teamsId, league: $league, sport: $sport, is_active: $isActive) {
+    id
+    abbreviation
+    display_name
+    league
+    sport
+    is_active
+    is_all_star
+    location
+    nickname
+    slug
+    short_display_name
+    alternate_color
+    color
+    uid
+    created_at
+    updated_at
+  }
+}

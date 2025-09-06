@@ -1,8 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
-import { getEvent, getPropBetsForEvent } from "../../../services/api";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { useGetEventsWithBetsQuery } from "@/generated/graphql";
@@ -44,7 +42,9 @@ export default function EventDetailPage() {
       <div className="mb-6 text-gray-600 dark:text-gray-400">
         Season Type: {event.season_type}
       </div>
-      <h3 className="text-xl font-semibold mb-2">Prop Bets</h3>
+      <h3 className="text-xl font-semibold mb-2">
+        Prop Bets ({propBets.length})
+      </h3>
       {propBets.length > 0 ? (
         <div className="space-y-4">
           {propBets.map((bet) => (
@@ -53,11 +53,11 @@ export default function EventDetailPage() {
               className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4"
             >
               <div className="font-medium text-gray-900 dark:text-white mb-1">
-                {bet.type_name}
+                {bet.type_name} - {bet.type_id}
               </div>
-              {/* <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                Athlete: {bet.athlete?.display_name || bet.athlete?.id || "N/A"}
-              </div> */}
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                {bet.athlete?.display_name || bet.team?.nickname || "N/A"}
+              </div>
               <div className="text-xs text-gray-500 dark:text-gray-500">
                 Over: {bet.over_american} ({bet.over_value})
               </div>

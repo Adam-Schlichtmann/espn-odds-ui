@@ -240,7 +240,17 @@ export type GetEventsWithBetsQueryVariables = Exact<{
 }>;
 
 
-export type GetEventsWithBetsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, date: any, league: string, name: string, sport: string, short_name?: string | null, venue?: string | null, venue_address?: string | null, season?: number | null, season_type?: number | null, week?: number | null, created_at: any, updated_at: any, propBets: Array<{ __typename?: 'PropBet', id: string, league: string, sport: string, type_name: string, type_id: string, target_value?: number | null, odds_last_updated: any, over_american?: string | null, over_value?: number | null, under_american?: string | null, under_value?: number | null }> }> };
+export type GetEventsWithBetsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, date: any, league: string, name: string, sport: string, short_name?: string | null, venue?: string | null, venue_address?: string | null, season?: number | null, season_type?: number | null, week?: number | null, created_at: any, updated_at: any, propBets: Array<{ __typename?: 'PropBet', id: string, league: string, sport: string, type_name: string, type_id: string, target_value?: number | null, odds_last_updated: any, over_american?: string | null, over_value?: number | null, under_american?: string | null, under_value?: number | null, athlete?: { __typename?: 'Athlete', display_name: string } | null, team?: { __typename?: 'Team', nickname?: string | null } | null }> }> };
+
+export type GetTeamsQueryVariables = Exact<{
+  teamsId?: InputMaybe<Scalars['ID']['input']>;
+  league?: InputMaybe<Scalars['String']['input']>;
+  sport?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+
+export type GetTeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: string, abbreviation: string, display_name: string, league: string, sport: string, is_active: boolean, is_all_star: boolean, location?: string | null, nickname?: string | null, slug?: string | null, short_display_name?: string | null, alternate_color?: string | null, color?: string | null, uid?: string | null, created_at: any, updated_at: any }> };
 
 
 export const GetAthletesDocument = gql`
@@ -514,6 +524,12 @@ export const GetEventsWithBetsDocument = gql`
       over_value
       under_american
       under_value
+      athlete {
+        display_name
+      }
+      team {
+        nickname
+      }
     }
   }
 }
@@ -559,3 +575,61 @@ export type GetEventsWithBetsQueryHookResult = ReturnType<typeof useGetEventsWit
 export type GetEventsWithBetsLazyQueryHookResult = ReturnType<typeof useGetEventsWithBetsLazyQuery>;
 export type GetEventsWithBetsSuspenseQueryHookResult = ReturnType<typeof useGetEventsWithBetsSuspenseQuery>;
 export type GetEventsWithBetsQueryResult = Apollo.QueryResult<GetEventsWithBetsQuery, GetEventsWithBetsQueryVariables>;
+export const GetTeamsDocument = gql`
+    query GetTeams($teamsId: ID, $league: String, $sport: String, $isActive: Boolean) {
+  teams(id: $teamsId, league: $league, sport: $sport, is_active: $isActive) {
+    id
+    abbreviation
+    display_name
+    league
+    sport
+    is_active
+    is_all_star
+    location
+    nickname
+    slug
+    short_display_name
+    alternate_color
+    color
+    uid
+    created_at
+    updated_at
+  }
+}
+    `;
+
+/**
+ * __useGetTeamsQuery__
+ *
+ * To run a query within a React component, call `useGetTeamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTeamsQuery({
+ *   variables: {
+ *      teamsId: // value for 'teamsId'
+ *      league: // value for 'league'
+ *      sport: // value for 'sport'
+ *      isActive: // value for 'isActive'
+ *   },
+ * });
+ */
+export function useGetTeamsQuery(baseOptions?: Apollo.QueryHookOptions<GetTeamsQuery, GetTeamsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTeamsQuery, GetTeamsQueryVariables>(GetTeamsDocument, options);
+      }
+export function useGetTeamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTeamsQuery, GetTeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTeamsQuery, GetTeamsQueryVariables>(GetTeamsDocument, options);
+        }
+export function useGetTeamsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetTeamsQuery, GetTeamsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetTeamsQuery, GetTeamsQueryVariables>(GetTeamsDocument, options);
+        }
+export type GetTeamsQueryHookResult = ReturnType<typeof useGetTeamsQuery>;
+export type GetTeamsLazyQueryHookResult = ReturnType<typeof useGetTeamsLazyQuery>;
+export type GetTeamsSuspenseQueryHookResult = ReturnType<typeof useGetTeamsSuspenseQuery>;
+export type GetTeamsQueryResult = Apollo.QueryResult<GetTeamsQuery, GetTeamsQueryVariables>;

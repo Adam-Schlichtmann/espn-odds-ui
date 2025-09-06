@@ -1,8 +1,8 @@
-import { DBPropBet, DBEvent } from "@/types";
+import { Event, PropBet } from "@/generated/graphql";
 
 interface StatsSummaryProps {
-  events: DBEvent[];
-  propBets: DBPropBet[];
+  events: Event[];
+  propBets: PropBet[];
 }
 
 export default function StatsSummary({ events, propBets }: StatsSummaryProps) {
@@ -10,7 +10,7 @@ export default function StatsSummary({ events, propBets }: StatsSummaryProps) {
   const totalPropBets = propBets.length;
 
   const sportsCount = events.reduce(
-    (acc: Record<string, number>, event: DBEvent) => {
+    (acc: Record<string, number>, event: Event) => {
       acc[event.sport] = (acc[event.sport] || 0) + 1;
       return acc;
     },
@@ -18,7 +18,7 @@ export default function StatsSummary({ events, propBets }: StatsSummaryProps) {
   );
 
   const leaguesCount = events.reduce(
-    (acc: Record<string, number>, event: DBEvent) => {
+    (acc: Record<string, number>, event: Event) => {
       acc[event.league] = (acc[event.league] || 0) + 1;
       return acc;
     },
@@ -26,11 +26,11 @@ export default function StatsSummary({ events, propBets }: StatsSummaryProps) {
   );
 
   const upcomingEvents = events.filter(
-    (event: DBEvent) => new Date(event.date) > new Date()
+    (event: Event) => new Date(event.date) > new Date()
   ).length;
 
-  const eventsWithPropBets = events.filter((event: DBEvent) =>
-    propBets.some((bet: DBPropBet) => bet.event_id === event.id)
+  const eventsWithPropBets = events.filter((event: Event) =>
+    propBets.some((bet: PropBet) => bet.event_id === event.id)
   ).length;
 
   return (
