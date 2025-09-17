@@ -26,11 +26,12 @@ export default function EventsTab() {
     return <ErrorMessage message={error.message} />;
   }
 
+  const events = data?.events || [];
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Events</h2>
       <UsableList<Event, SortTitle, FilterTitle>
-        data={data?.events ?? []}
+        data={events}
         defaultSort={[{ title: START_DATE, ascending: true }]}
         filterOptions={FilterOptions}
         sortOptions={SortOptions}
@@ -38,27 +39,20 @@ export default function EventsTab() {
         getSortValue={getSortValue}
         getSearchKeywords={getKeywordStrings}
       >
-        {({ data: filteredEvents, clearSearch }) =>
-          filteredEvents.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredEvents.map((event) => (
-                <EventCard key={event.id} event={event} />
+        {({ data }) => (
+          <>
+            <div className="mb-6">
+              <p className="text-gray-600 dark:text-gray-400">
+                Showing {data.length} of {events.length} events
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {data.map((a) => (
+                <EventCard key={a.id} event={a} />
               ))}
             </div>
-          ) : (
-            <div className="text-center py-12">
-              <div className="text-gray-500 dark:text-gray-400 text-lg">
-                No events match your current filters.
-              </div>
-              <button
-                onClick={clearSearch}
-                className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors"
-              >
-                Clear Filters
-              </button>
-            </div>
-          )
-        }
+          </>
+        )}
       </UsableList>
     </div>
   );

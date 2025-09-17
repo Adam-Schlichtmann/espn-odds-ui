@@ -43,9 +43,9 @@ export default function EventDetailPage() {
         Season Type: {event.season_type}
       </div>
       <h3 className="text-xl font-semibold mb-2">
-        Prop Bets ({propBets.length})
+        Prop Bets ({propBets?.length})
       </h3>
-      {propBets.length > 0 ? (
+      {propBets?.length && propBets.length > 0 ? (
         <div className="space-y-4">
           {propBets.map((bet) => (
             <div
