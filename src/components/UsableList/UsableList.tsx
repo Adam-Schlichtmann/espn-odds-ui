@@ -183,7 +183,7 @@ const UsableList = <D, S extends string, F extends string>({
                 {availableFilterOptions.map((filter) => (
                   <div key={filter.title} className="flex flex-col">
                     <span className="font-medium mb-1">{filter.title}</span>
-                    <div className="flex flex-wrap gap-1">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                       {filter.options.map((option) => (
                         <label key={option} className="flex items-center gap-1">
                           <input
