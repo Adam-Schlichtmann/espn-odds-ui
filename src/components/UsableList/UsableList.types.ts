@@ -24,7 +24,6 @@ export type UsableListProps<D, S extends string, F extends string> = {
 export type ChildProps<D, S extends string, F extends string> = {
   clearSearch: () => void;
   data: D[];
-  searchSubmitted: boolean;
   searchText: string;
   selectedFilterOptions: FilterOption<F>[];
   selectedSortOptions: SortOption<S>[];

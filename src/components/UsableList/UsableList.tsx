@@ -33,7 +33,6 @@ const UsableList = <D, S extends string, F extends string>({
     FilterOption<F>[]
   >(filterOptions.map((title) => ({ title, options: [] })));
   const [searchText, setSearchText] = useState("");
-  const [searchSubmitted, setSearchSubmitted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   // Filtering
@@ -46,7 +45,7 @@ const UsableList = <D, S extends string, F extends string>({
   });
 
   // Searching
-  if (searchSubmitted && searchText.trim()) {
+  if (searchText.trim()) {
     const keywords = searchText.trim().toLowerCase().split(/\s+/);
     filteredData = filteredData.filter((datum) => {
       const keywordString = getSearchKeywords(datum).toLowerCase();
@@ -86,11 +85,9 @@ const UsableList = <D, S extends string, F extends string>({
   // UI for search
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearchSubmitted(true);
   };
   const clearSearch = () => {
     setSearchText("");
-    setSearchSubmitted(false);
   };
 
   // Generate filter options using the utility
@@ -110,12 +107,6 @@ const UsableList = <D, S extends string, F extends string>({
           placeholder="Search..."
           className="px-3 py-2 border rounded w-full"
         />
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
-        >
-          Search
-        </button>
         <button
           type="button"
           className="ml-2 p-2 rounded-full bg-gray-700 hover:bg-gray-800 text-white focus:outline-none"
@@ -137,15 +128,6 @@ const UsableList = <D, S extends string, F extends string>({
             />
           </svg>
         </button>
-        {searchSubmitted && (
-          <button
-            type="button"
-            onClick={clearSearch}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded"
-          >
-            Clear
-          </button>
-        )}
       </form>
 
       {/* Modal for filters and sort */}
@@ -263,7 +245,6 @@ const UsableList = <D, S extends string, F extends string>({
       {children({
         clearSearch,
         data: filteredData,
-        searchSubmitted,
         searchText,
         selectedFilterOptions,
         selectedSortOptions,
