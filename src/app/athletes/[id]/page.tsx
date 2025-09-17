@@ -3,6 +3,7 @@ import { useParams } from "next/navigation";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { useGetAthletesWithBetsQuery } from "@/generated/graphql";
+import ScrapeButton from "../../../components/ScrapeButton";
 
 export default function AthleteDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +19,13 @@ export default function AthleteDetailPage() {
   return (
     <div className="max-w-2xl mx-auto bg-white dark:bg-gray-900 rounded-lg shadow p-6">
       <h2 className="text-3xl font-bold mb-4">{athlete.display_name}</h2>
+      <div className="mb-4">
+        <ScrapeButton
+          athlete={athlete.id}
+          league={athlete.league}
+          sport={athlete.sport}
+        />
+      </div>
       {athlete.team?.display_name && (
         <div className="mb-2 text-gray-600 dark:text-gray-400">
           Team: {athlete.team.display_name}

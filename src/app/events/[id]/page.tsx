@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { useGetEventsWithBetsQuery } from "@/generated/graphql";
+import ScrapeButton from "@/components/ScrapeButton";
 
 export default function EventDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +22,13 @@ export default function EventDetailPage() {
   return (
     <div className="max-w-2xl mx-auto bg-white dark:bg-gray-900 rounded-lg shadow p-6">
       <h2 className="text-3xl font-bold mb-4">{event.name}</h2>
+      <div className="mb-4">
+        <ScrapeButton
+          event={event.id}
+          league={event.league}
+          sport={event.sport}
+        />
+      </div>
       <div className="mb-2 text-gray-600 dark:text-gray-400">
         League: {event.league}
       </div>
