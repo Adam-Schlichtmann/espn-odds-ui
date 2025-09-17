@@ -1,4 +1,4 @@
-import { SPORT, LEAGUE, START_DATE, EVENT_NAME } from "../constants";
+import { EVENT_NAME, LEAGUE, SPORT, START_DATE } from "../constants";
 
 export type FilterTitle = typeof SPORT | typeof LEAGUE;
 export type SortTitle =

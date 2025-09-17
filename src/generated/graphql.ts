@@ -200,7 +200,7 @@ export type GetAthletesQueryVariables = Exact<{
 }>;
 
 
-export type GetAthletesQuery = { __typename?: 'Query', athletes: Array<{ __typename?: 'Athlete', id: string, age: number, birth_date: any, debut_year: number, display_name: string, first_name: string, height_display: string, height: number, jersey: string, last_name: string, league: string, position_abbreviation: string, position_id: string, position_name: string, short_name: string, slug: string, sport: string, status_id: string, status_name: string, team_id: string, weight_display: string, weight: number, created_at: any, updated_at: any, team?: { __typename?: 'Team', id: string, display_name: string } | null }> };
+export type GetAthletesQuery = { __typename?: 'Query', athletes: Array<{ __typename?: 'Athlete', id: string, age: number, birth_date: any, debut_year: number, display_name: string, first_name: string, height_display: string, height: number, jersey: string, last_name: string, league: string, position_abbreviation: string, position_id: string, position_name: string, short_name: string, slug: string, sport: string, status_id: string, status_name: string, team_id: string, weight_display: string, weight: number, created_at: any, updated_at: any, team?: { __typename?: 'Team', id: string, abbreviation: string, display_name: string, league: string, sport: string, is_active: boolean, is_all_star: boolean, location?: string | null, nickname?: string | null, slug?: string | null, short_display_name?: string | null, alternate_color?: string | null, color?: string | null, uid?: string | null, created_at: any, updated_at: any } | null }> };
 
 export type GetAthletesWithBetsQueryVariables = Exact<{
   athletesId?: InputMaybe<Scalars['ID']['input']>;
@@ -288,7 +288,21 @@ export const GetAthletesDocument = gql`
     updated_at
     team {
       id
+      abbreviation
       display_name
+      league
+      sport
+      is_active
+      is_all_star
+      location
+      nickname
+      slug
+      short_display_name
+      alternate_color
+      color
+      uid
+      created_at
+      updated_at
     }
   }
 }

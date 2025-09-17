@@ -38,7 +38,21 @@ query GetAthletes(
     updated_at
     team {
       id
+      abbreviation
       display_name
+      league
+      sport
+      is_active
+      is_all_star
+      location
+      nickname
+      slug
+      short_display_name
+      alternate_color
+      color
+      uid
+      created_at
+      updated_at
     }
   }
 }
