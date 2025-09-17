@@ -59,7 +59,7 @@ export default function EventCard({ event }: EventCardProps) {
   // };
 
   return (
-    <Link href={`/events/${event.id}`} passHref legacyBehavior>
+    <Link href={`/events/${event.id}`}>
       <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
         <div className="flex justify-between items-start mb-4">
           <div>

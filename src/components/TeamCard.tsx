@@ -7,7 +7,7 @@ type Props = {
 
 const TeamCard = ({ team }: Props) => {
   return (
-    <Link href={`/teams/${team.id}`} key={team.id} passHref legacyBehavior>
+    <Link href={`/teams/${team.id}`}>
       <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
         <h3 className="text-lg font-semibold mb-2">{team.display_name}</h3>
         <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">

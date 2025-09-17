@@ -199,7 +199,7 @@ const UsableList = <D, S extends string, F extends string>({
               <h3 className="text-lg font-semibold mb-4">Sort</h3>
               {/* Sort Options Section as radio group */}
               {selectedSortOptions.map((sort, index) => (
-                <div className="flex flex-col gap-2 text-left">
+                <div key={index} className="flex flex-col gap-2 text-left">
                   {sortOptions.map((title) => (
                     <label
                       key={title}
