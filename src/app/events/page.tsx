@@ -5,16 +5,15 @@ import ErrorMessage from "../../components/ErrorMessage";
 import { Event, useGetEventsQuery } from "@/generated/graphql";
 import UsableList from "../../components/UsableList/UsableList";
 import {
-  EVENT_NAME,
   FilterOptions,
   FilterTitle,
-  LEAGUE,
+  getFilterValue,
+  getKeywordStrings,
+  getSortValue,
   SortOptions,
   SortTitle,
-  SPORT,
-  START_DATE,
-} from "./page.types";
-import getSortValue from "@/sortFilter/event/getSortValue";
+} from "@/sortFilter/event";
+import { START_DATE, EVENT_NAME } from "@/sortFilter/constants";
 
 export default function EventsTab() {
   const { data, loading, error } = useGetEventsQuery();
@@ -47,15 +46,9 @@ export default function EventsTab() {
         ]}
         filterOptions={FilterOptions}
         sortOptions={SortOptions}
-        getFilterValue={(key) => (event) => {
-          if (key === SPORT) return event.sport;
-          if (key === LEAGUE) return event.league;
-          return "";
-        }}
+        getFilterValue={getFilterValue}
         getSortValue={getSortValue}
-        getSearchKeywords={(event) =>
-          `${event.name} ${event.short_name} ${event.sport} ${event.league}`
-        }
+        getSearchKeywords={getKeywordStrings}
       >
         {({ data: filteredEvents, clearSearch }) =>
           filteredEvents.length > 0 ? (

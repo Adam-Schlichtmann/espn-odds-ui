@@ -8,3 +8,4 @@ export type SortTitle =
   | typeof LEAGUE;
 
 export const FilterOptions: FilterTitle[] = [SPORT, LEAGUE];
+export const SortOptions: SortTitle[] = [START_DATE, EVENT_NAME, SPORT, LEAGUE];
