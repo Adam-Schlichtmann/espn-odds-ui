@@ -195,45 +195,56 @@ const UsableList = <D, S extends string, F extends string>({
               <h3 className="text-lg font-semibold mb-4">Sort</h3>
               {/* Sort Options Section as radio group */}
               {selectedSortOptions.map((sort, index) => (
-                <div className="mb-4 flex flex-col gap-4">
-                  <div className="flex flex-col gap-4 text-left">
-                    {sortOptions.map((title) => (
-                      <label key={title} className="flex items-center gap-2">
-                        <input
-                          type="radio"
-                          name={`sort-key-${index}`}
-                          value={title}
-                          checked={sort.title === title}
-                          onChange={() => {
-                            setSelectedSortOptions((prev) =>
-                              prev.map((item, i) =>
-                                i === index
-                                  ? { ...item, title: title as S }
-                                  : item
-                              )
-                            );
-                          }}
-                        />
-                        <p>{title}</p>
-                      </label>
-                    ))}
-                    <button
-                      type="button"
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
-                      onClick={() => {
-                        setSelectedSortOptions((prev) =>
-                          prev.map((item, i) =>
-                            i === index
-                              ? { ...item, ascending: !item.ascending }
-                              : item
-                          )
-                        );
-                      }}
-                      aria-label="Toggle sort direction"
+                <div className="flex flex-col gap-2 text-left">
+                  {sortOptions.map((title) => (
+                    <label
+                      key={title}
+                      className="flex items-center gap-2 cursor-pointer select-none"
                     >
-                      {sort.ascending ? "Ascending" : "Descending"}
-                    </button>
-                  </div>
+                      <input
+                        type="radio"
+                        name={`sort-key-${index}`}
+                        value={title}
+                        checked={sort.title === title}
+                        onChange={() => {
+                          setSelectedSortOptions((prev) => {
+                            // Prevent duplicate sort keys in other levels
+                            if (
+                              prev.some(
+                                (s, i) => i !== index && s.title === title
+                              )
+                            )
+                              return prev;
+                            return prev.map((item, i) =>
+                              i === index
+                                ? { ...item, title: title as S }
+                                : item
+                            );
+                          });
+                        }}
+                        className="w-5 h-5 rounded-full border-2 border-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-600 bg-white transition-colors duration-150"
+                      />
+                      <span className="ml-1 text-gray-900 dark:text-gray-100 text-base">
+                        {title}
+                      </span>
+                    </label>
+                  ))}
+                  <button
+                    type="button"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+                    onClick={() => {
+                      setSelectedSortOptions((prev) =>
+                        prev.map((item, i) =>
+                          i === index
+                            ? { ...item, ascending: !item.ascending }
+                            : item
+                        )
+                      );
+                    }}
+                    aria-label="Toggle sort direction"
+                  >
+                    {sort.ascending ? "Ascending" : "Descending"}
+                  </button>
                 </div>
               ))}
             </div>
