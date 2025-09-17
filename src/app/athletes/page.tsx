@@ -12,6 +12,7 @@ import {
   SortOptions,
   SortTitle,
   FilterOptions,
+  getKeywordString,
 } from "@/sortFilter/athlete";
 import { ATHLETE_NAME } from "@/sortFilter/constants";
 
@@ -33,9 +34,7 @@ export default function AthletesTab() {
         sortOptions={SortOptions}
         getFilterValue={getFilterValue}
         getSortValue={getSortValue}
-        getSearchKeywords={(athlete) =>
-          `${athlete.display_name} ${athlete.position_name} ${athlete.league} ${athlete.sport} ${athlete.team?.display_name}`
-        }
+        getSearchKeywords={getKeywordString}
       >
         {({ data: filteredAthletes }) => (
           <>
