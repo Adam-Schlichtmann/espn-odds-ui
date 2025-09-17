@@ -112,13 +112,13 @@ const UsableList = <D, S extends string, F extends string>({
         />
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded"
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
         >
           Search
         </button>
         <button
           type="button"
-          className="ml-2 p-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
+          className="ml-2 p-2 rounded-full bg-gray-700 hover:bg-gray-800 text-white focus:outline-none"
           aria-label="Open filters and sort"
           onClick={() => setModalOpen(true)}
         >
@@ -141,7 +141,7 @@ const UsableList = <D, S extends string, F extends string>({
           <button
             type="button"
             onClick={clearSearch}
-            className="px-4 py-2 bg-gray-300 rounded"
+            className="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded"
           >
             Clear
           </button>
@@ -157,7 +157,7 @@ const UsableList = <D, S extends string, F extends string>({
             style={{ maxWidth: "100vw" }}
           >
             <button
-              className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none z-10"
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-700 hover:bg-gray-800 text-white focus:outline-none z-10"
               aria-label="Close filters and sort"
               onClick={() => setModalOpen(false)}
             >
