@@ -185,7 +185,10 @@ const UsableList = <D, S extends string, F extends string>({
                     <span className="font-medium mb-1">{filter.title}</span>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                       {filter.options.map((option) => (
-                        <label key={option} className="flex items-center gap-1">
+                        <label
+                          key={option}
+                          className="flex items-center gap-2 py-1 cursor-pointer select-none"
+                        >
                           <input
                             type="checkbox"
                             checked={
@@ -196,8 +199,11 @@ const UsableList = <D, S extends string, F extends string>({
                             onChange={() =>
                               handleFilterChange(filter.title, option)
                             }
+                            className="w-5 h-5 rounded border-2 border-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-600 bg-white transition-colors duration-150"
                           />
-                          <span>{option}</span>
+                          <span className="ml-1 text-gray-900 dark:text-gray-100 text-base">
+                            {option}
+                          </span>
                         </label>
                       ))}
                     </div>
