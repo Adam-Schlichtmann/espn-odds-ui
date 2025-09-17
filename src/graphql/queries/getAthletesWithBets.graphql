@@ -33,7 +33,11 @@ query GetAthletesWithBets(
     sport
     status_id
     status_name
-    team_id
+    team {
+      id
+      display_name
+      short_display_name
+    }
     weight_display
     weight
     created_at
@@ -44,15 +48,21 @@ query GetAthletesWithBets(
       league: $league
       type_id: $typeId
     ) {
+      event {
+        id
+        date
+        name
+        short_name
+      }
       id
       league
-      sport
-      type_name
-      type_id
-      target_value
       odds_last_updated
       over_american
       over_value
+      sport
+      target_value
+      type_id
+      type_name
       under_american
       under_value
     }

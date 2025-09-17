@@ -213,7 +213,7 @@ export type GetAthletesWithBetsQueryVariables = Exact<{
 }>;
 
 
-export type GetAthletesWithBetsQuery = { __typename?: 'Query', athletes: Array<{ __typename?: 'Athlete', id: string, age: number, birth_date: any, debut_year: number, display_name: string, first_name: string, height_display: string, height: number, jersey: string, last_name: string, league: string, position_abbreviation: string, position_id: string, position_name: string, short_name: string, slug: string, sport: string, status_id: string, status_name: string, team_id: string, weight_display: string, weight: number, created_at: any, updated_at: any, propBets?: Array<{ __typename?: 'PropBet', id: string, league: string, sport: string, type_name: string, type_id: string, target_value?: number | null, odds_last_updated: any, over_american?: string | null, over_value?: number | null, under_american?: string | null, under_value?: number | null }> | null }> };
+export type GetAthletesWithBetsQuery = { __typename?: 'Query', athletes: Array<{ __typename?: 'Athlete', id: string, age: number, birth_date: any, debut_year: number, display_name: string, first_name: string, height_display: string, height: number, jersey: string, last_name: string, league: string, position_abbreviation: string, position_id: string, position_name: string, short_name: string, slug: string, sport: string, status_id: string, status_name: string, weight_display: string, weight: number, created_at: any, updated_at: any, team?: { __typename?: 'Team', id: string, display_name: string, short_display_name?: string | null } | null, propBets?: Array<{ __typename?: 'PropBet', id: string, league: string, odds_last_updated: any, over_american?: string | null, over_value?: number | null, sport: string, target_value?: number | null, type_id: string, type_name: string, under_american?: string | null, under_value?: number | null, event: { __typename?: 'Event', id: string, date: any, name: string, short_name?: string | null } }> | null }> };
 
 export type GetEventsQueryVariables = Exact<{
   seasonType?: InputMaybe<Scalars['Int']['input']>;
@@ -372,7 +372,11 @@ export const GetAthletesWithBetsDocument = gql`
     sport
     status_id
     status_name
-    team_id
+    team {
+      id
+      display_name
+      short_display_name
+    }
     weight_display
     weight
     created_at
@@ -383,15 +387,21 @@ export const GetAthletesWithBetsDocument = gql`
       league: $league
       type_id: $typeId
     ) {
+      event {
+        id
+        date
+        name
+        short_name
+      }
       id
       league
-      sport
-      type_name
-      type_id
-      target_value
       odds_last_updated
       over_american
       over_value
+      sport
+      target_value
+      type_id
+      type_name
       under_american
       under_value
     }
