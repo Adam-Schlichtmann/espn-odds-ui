@@ -6,14 +6,16 @@ const generateFilterOptions = <D, F extends string>(
   filterOptions: F[],
   getFilterValue: (key: F) => (item: D) => string | null
 ): FilterOption<F>[] =>
-  filterOptions.map<FilterOption<F>>((f) => {
-    const options = Array.from(
-      new Set(
-        data.map((item) => getFilterValue(f)(item)).filter((v) => v != null)
-      )
-    );
-    return { title: f, options };
-  });
+  filterOptions
+    .map<FilterOption<F>>((f) => {
+      const options = Array.from(
+        new Set(
+          data.map((item) => getFilterValue(f)(item)).filter((v) => v != null)
+        )
+      );
+      return { title: f, options };
+    })
+    .filter((f) => f.options.length > 1);
 
 const UsableList = <D, S extends string, F extends string>({
   children,
@@ -47,8 +49,8 @@ const UsableList = <D, S extends string, F extends string>({
   if (searchSubmitted && searchText.trim()) {
     const keywords = searchText.trim().toLowerCase().split(/\s+/);
     filteredData = filteredData.filter((datum) => {
-      const haystack = getSearchKeywords(datum).toLowerCase();
-      return keywords.every((kw) => haystack.includes(kw));
+      const keywordString = getSearchKeywords(datum).toLowerCase();
+      return keywords.every((kw) => keywordString.includes(kw));
     });
   }
 

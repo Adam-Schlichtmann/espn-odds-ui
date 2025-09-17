@@ -15,7 +15,7 @@ import {
 } from "@/sortFilter/athlete";
 import { ATHLETE_NAME } from "@/sortFilter/constants";
 
-export default function AthletesTab(props: { tabKey: string }) {
+export default function AthletesTab() {
   const { data, loading, error } = useGetAthletesQuery();
 
   if (loading) return <LoadingSpinner />;
