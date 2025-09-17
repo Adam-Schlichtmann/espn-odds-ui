@@ -41,6 +41,10 @@ export default function EventsTab() {
       {/* EventFilters removed, replaced by UsableList controls */}
       <UsableList<Event, SortTitle, FilterTitle>
         data={data?.events ?? []}
+        defaultSort={[
+          { title: START_DATE, ascending: true },
+          { title: EVENT_NAME, ascending: true },
+        ]}
         filterOptions={FilterOptions}
         sortOptions={SortOptions}
         getFilterValue={(key) => (event) => {

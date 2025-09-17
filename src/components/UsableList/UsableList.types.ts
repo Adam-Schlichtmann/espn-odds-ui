@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { ReactNode } from "react";
 
 export type SortOption<S extends string> = {
   title: S;
@@ -11,15 +11,14 @@ export type FilterOption<F extends string> = {
 };
 
 export type UsableListProps<D, S extends string, F extends string> = {
-  children: Awaited<FunctionComponent<ChildProps<D, S, F>>>;
+  children: (props: ChildProps<D, S, F>) => ReactNode;
   data: D[];
+  defaultSort: SortOption<S>[];
   filterOptions: F[];
   getFilterValue: (title: F) => (datum: D) => string;
   getSearchKeywords: (datum: D) => string;
   getSortValue: (title: S) => (datum: D) => string | number;
-  maxSortDepth?: number;
   sortOptions: S[];
-  defaultSort: SortOption<S>[];
 };
 
 export type ChildProps<D, S extends string, F extends string> = {

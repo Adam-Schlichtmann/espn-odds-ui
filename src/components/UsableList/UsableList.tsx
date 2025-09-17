@@ -23,7 +23,6 @@ const UsableList = <D, S extends string, F extends string>({
   getFilterValue,
   getSearchKeywords,
   getSortValue,
-  maxSortDepth = 2,
   sortOptions,
 }: UsableListProps<D, S, F>) => {
   const [selectedSortOptions, setSelectedSortOptions] =
@@ -98,6 +97,8 @@ const UsableList = <D, S extends string, F extends string>({
     filterOptions,
     getFilterValue
   );
+
+  console.log(selectedSortOptions);
 
   return (
     <div>
@@ -205,47 +206,48 @@ const UsableList = <D, S extends string, F extends string>({
               </div>
               <h3 className="text-lg font-semibold mb-4">Sort</h3>
               {/* Sort Options Section as radio group */}
-              <div className="mb-4 flex flex-col gap-4">
-                <div className="flex flex-col gap-4 text-left">
-                  {sortOptions.map((title) => (
-                    <label key={title} className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="sort-key"
-                        value={title}
-                        checked={selectedSortOptions[0]?.title === title}
-                        onChange={() => {
-                          setSelectedSortOptions((prev) => [
-                            {
-                              title: title as S,
-                              ascending: prev[0]?.ascending ?? true,
-                            },
-                          ]);
-                        }}
-                      />
-                      <p>{title}</p>
-                    </label>
-                  ))}
-                  <button
-                    type="button"
-                    className="px-2 py-1 bg-gray-200 rounded flex items-center gap-1"
-                    onClick={() => {
-                      setSelectedSortOptions((prev) => [
-                        {
-                          ...prev[0],
-                          ascending: !(prev[0]?.ascending ?? true),
-                        },
-                      ]);
-                    }}
-                    aria-label="Toggle sort direction"
-                    disabled={!selectedSortOptions[0]}
-                  >
-                    {selectedSortOptions[0]?.ascending ?? true
-                      ? "↑ Asc"
-                      : "↓ Desc"}
-                  </button>
+              {selectedSortOptions.map((sort, index) => (
+                <div className="mb-4 flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 text-left">
+                    {sortOptions.map((title) => (
+                      <label key={title} className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="sort-key"
+                          value={title}
+                          checked={sort.title === title}
+                          onChange={() => {
+                            setSelectedSortOptions((prev) =>
+                              prev.map((item, i) =>
+                                i === index
+                                  ? { ...item, title: title as S }
+                                  : item
+                              )
+                            );
+                          }}
+                        />
+                        <p>{title}</p>
+                      </label>
+                    ))}
+                    <button
+                      type="button"
+                      className="px-2 py-1 bg-gray-200 rounded flex items-center gap-1"
+                      onClick={() => {
+                        setSelectedSortOptions((prev) =>
+                          prev.map((item, i) =>
+                            i === index
+                              ? { ...item, ascending: !item.ascending }
+                              : item
+                          )
+                        );
+                      }}
+                      aria-label="Toggle sort direction"
+                    >
+                      {sort.ascending ? "↑ Asc" : "↓ Desc"}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
