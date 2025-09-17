@@ -13,7 +13,7 @@ import {
   SortOptions,
   SortTitle,
 } from "@/sortFilter/event";
-import { START_DATE, EVENT_NAME } from "@/sortFilter/constants";
+import { START_DATE } from "@/sortFilter/constants";
 
 export default function EventsTab() {
   const { data, loading, error } = useGetEventsQuery();
@@ -28,22 +28,10 @@ export default function EventsTab() {
 
   return (
     <div>
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-          ESPN Odds Dashboard
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400">
-          View sports events and betting odds in real-time
-        </p>
-      </div>
-      {/* <StatsSummary events={data?.events ?? []} propBets={[]} /> */}
-      {/* EventFilters removed, replaced by UsableList controls */}
+      <h2 className="text-2xl font-bold mb-4">Events</h2>
       <UsableList<Event, SortTitle, FilterTitle>
         data={data?.events ?? []}
-        defaultSort={[
-          { title: START_DATE, ascending: true },
-          { title: EVENT_NAME, ascending: true },
-        ]}
+        defaultSort={[{ title: START_DATE, ascending: true }]}
         filterOptions={FilterOptions}
         sortOptions={SortOptions}
         getFilterValue={getFilterValue}
@@ -72,11 +60,6 @@ export default function EventsTab() {
           )
         }
       </UsableList>
-      <footer className="mt-16 text-center text-gray-500 dark:text-gray-400">
-        <p>
-          Data sourced from ESPN • Last updated: {new Date().toLocaleString()}
-        </p>
-      </footer>
     </div>
   );
 }

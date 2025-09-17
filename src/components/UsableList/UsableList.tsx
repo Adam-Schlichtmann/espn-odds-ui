@@ -159,39 +159,43 @@ const UsableList = <D, S extends string, F extends string>({
               </svg>
             </button>
             <div className="p-6 overflow-y-auto flex-1">
-              <h3 className="text-lg font-semibold mb-4">Filters</h3>
-              {/* Filter Options Section */}
-              <div className="mb-8 flex flex-wrap gap-4">
-                {availableFilterOptions.map((filter) => (
-                  <div key={filter.title} className="flex flex-col">
-                    <span className="font-medium mb-1">{filter.title}</span>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                      {filter.options.map((option) => (
-                        <label
-                          key={option}
-                          className="flex items-center gap-2 py-1 cursor-pointer select-none"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={
-                              selectedFilterOptions
-                                .find((f) => f.title === filter.title)
-                                ?.options.includes(option) || false
-                            }
-                            onChange={() =>
-                              handleFilterChange(filter.title, option)
-                            }
-                            className="w-5 h-5 rounded border-2 border-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-600 bg-white transition-colors duration-150"
-                          />
-                          <span className="ml-1 text-gray-900 dark:text-gray-100 text-base">
-                            {option}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
+              {availableFilterOptions.length > 0 && (
+                <>
+                  <h3 className="text-lg font-semibold mb-4">Filters</h3>
+                  {/* Filter Options Section */}
+                  <div className="mb-8 flex flex-wrap gap-4">
+                    {availableFilterOptions.map((filter) => (
+                      <div key={filter.title} className="flex flex-col">
+                        <span className="font-medium mb-1">{filter.title}</span>
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                          {filter.options.map((option) => (
+                            <label
+                              key={option}
+                              className="flex items-center gap-2 py-1 cursor-pointer select-none"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={
+                                  selectedFilterOptions
+                                    .find((f) => f.title === filter.title)
+                                    ?.options.includes(option) || false
+                                }
+                                onChange={() =>
+                                  handleFilterChange(filter.title, option)
+                                }
+                                className="w-5 h-5 rounded border-2 border-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-600 bg-white transition-colors duration-150"
+                              />
+                              <span className="ml-1 text-gray-900 dark:text-gray-100 text-base">
+                                {option}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </>
+              )}
               <h3 className="text-lg font-semibold mb-4">Sort</h3>
               {/* Sort Options Section as radio group */}
               {selectedSortOptions.map((sort, index) => (

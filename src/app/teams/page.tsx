@@ -22,7 +22,7 @@ export default function TeamsTab(props: { tabKey: string }) {
   const teams = data?.teams || [];
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Athletes</h2>
+      <h2 className="text-2xl font-bold mb-4">Teams</h2>
       <UsableList<Team, SortTitle, FilterTitle>
         data={teams}
         filterOptions={FilterOptions}
