@@ -231,7 +231,7 @@ const UsableList = <D, S extends string, F extends string>({
                     ))}
                     <button
                       type="button"
-                      className="px-2 py-1 bg-gray-200 rounded flex items-center gap-1"
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
                       onClick={() => {
                         setSelectedSortOptions((prev) =>
                           prev.map((item, i) =>
@@ -243,7 +243,7 @@ const UsableList = <D, S extends string, F extends string>({
                       }}
                       aria-label="Toggle sort direction"
                     >
-                      {sort.ascending ? "↑ Asc" : "↓ Desc"}
+                      {sort.ascending ? "Ascending" : "Descending"}
                     </button>
                   </div>
                 </div>
