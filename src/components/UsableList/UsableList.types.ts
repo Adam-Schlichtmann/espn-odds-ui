@@ -11,7 +11,7 @@ export type FilterOption<F extends string> = {
 };
 
 export type UsableListProps<D, S extends string, F extends string> = {
-  children: FunctionComponent<ChildProps<D, S, F>>;
+  children: Awaited<FunctionComponent<ChildProps<D, S, F>>>;
   data: D[];
   filterOptions: F[];
   getFilterValue: (title: F) => (datum: D) => string;

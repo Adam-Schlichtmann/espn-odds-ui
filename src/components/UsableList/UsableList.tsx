@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { FilterOption, SortOption, UsableListProps } from "./UsableList.types";
 
 const generateFilterOptions = <D, F extends string>(
@@ -91,13 +91,12 @@ const UsableList = <D, S extends string, F extends string>({
     setSearchSubmitted(false);
   };
 
-  // Generate filter options from data
-  const filterOptionValues: Record<string, string[]> = {};
-  filterOptions.forEach((title) => {
-    filterOptionValues[title] = Array.from(
-      new Set(data.map(getFilterValue(title)).filter((v) => v != null))
-    );
-  });
+  // Generate filter options using the utility
+  const availableFilterOptions = generateFilterOptions(
+    data,
+    filterOptions,
+    getFilterValue
+  );
 
   return (
     <div>
@@ -125,57 +124,85 @@ const UsableList = <D, S extends string, F extends string>({
           </button>
         )}
       </form>
-      <div className="mb-4 flex flex-wrap items-center gap-6">
-        {selectedSortOptions.map((sort, index) => (
-          <div className="flex items-center gap-2">
-            <select
-              className="px-2 py-1 border rounded"
-              value={sort.title || ""}
-              onChange={(e) => {
-                const newTitle = e.target.value;
-                // Keep current direction if possible, default to ascending
-                setSelectedSortOptions((prev) =>
-                  prev
-                    .map((item, i) =>
-                      index === i
-                        ? {
-                            title: newTitle as S,
-                            ascending: item.ascending ?? true,
-                          }
-                        : item
-                    )
-                    .slice(0, maxSortDepth)
-                );
-              }}
-            >
-              {sortOptions.map((title) => (
-                <option
-                  key={title}
-                  value={title}
-                  disabled={
-                    index > 0 && selectedSortOptions[1]?.title === title
-                  }
-                >
-                  {title}
-                </option>
+      {/* Filter Options Section */}
+      <div className="mb-4 flex flex-wrap gap-4">
+        {availableFilterOptions.map((filter) => (
+          <div key={filter.title} className="flex flex-col">
+            <span className="font-medium mb-1">{filter.title}</span>
+            <div className="flex flex-wrap gap-1">
+              {filter.options.map((option) => (
+                <label key={option} className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={
+                      selectedFilterOptions
+                        .find((f) => f.title === filter.title)
+                        ?.options.includes(option) || false
+                    }
+                    onChange={() => handleFilterChange(filter.title, option)}
+                  />
+                  <span>{option}</span>
+                </label>
               ))}
-            </select>
-            <button
-              type="button"
-              className="px-2 py-1 bg-gray-200 rounded flex items-center gap-1"
-              onClick={() => {
-                setSelectedSortOptions((prev) =>
-                  prev.map((item, i) =>
-                    index === i ? { ...item, ascending: !item.ascending } : item
-                  )
-                );
-              }}
-              aria-label="Toggle primary sort direction"
-            >
-              {selectedSortOptions[0]?.ascending ?? true ? "↑ Asc" : "↓ Desc"}
-            </button>
+            </div>
           </div>
         ))}
+      </div>
+      {/* Sort Options Section */}
+      <div className="mb-4 flex flex-wrap items-center gap-6">
+        {selectedSortOptions.map(
+          (sort, index): ReactNode => (
+            <div className="flex items-center gap-2" key={index}>
+              <select
+                className="px-2 py-1 border rounded"
+                value={sort.title || ""}
+                onChange={(e) => {
+                  const newTitle = e.target.value;
+                  setSelectedSortOptions((prev) =>
+                    prev
+                      .map((item, i) =>
+                        index === i
+                          ? {
+                              title: newTitle as S,
+                              ascending: item.ascending ?? true,
+                            }
+                          : item
+                      )
+                      .slice(0, maxSortDepth)
+                  );
+                }}
+              >
+                {sortOptions.map((title) => (
+                  <option
+                    key={title}
+                    value={title}
+                    disabled={
+                      index > 0 && selectedSortOptions[1]?.title === title
+                    }
+                  >
+                    {title}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                className="px-2 py-1 bg-gray-200 rounded flex items-center gap-1"
+                onClick={() => {
+                  setSelectedSortOptions((prev) =>
+                    prev.map((item, i) =>
+                      index === i
+                        ? { ...item, ascending: !item.ascending }
+                        : item
+                    )
+                  );
+                }}
+                aria-label="Toggle primary sort direction"
+              >
+                {selectedSortOptions[0]?.ascending ?? true ? "↑ Asc" : "↓ Desc"}
+              </button>
+            </div>
+          )
+        )}
       </div>
       {children({
         clearSearch,
