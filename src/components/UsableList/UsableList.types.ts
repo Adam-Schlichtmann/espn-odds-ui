@@ -1,4 +1,4 @@
-import { FC, FunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 export type SortOption<S extends string> = {
   title: S;
@@ -19,6 +19,7 @@ export type UsableListProps<D, S extends string, F extends string> = {
   getSortValue: (title: S) => (datum: D) => string | number;
   maxSortDepth?: number;
   sortOptions: S[];
+  defaultSort: SortOption<S>[];
 };
 
 export type ChildProps<D, S extends string, F extends string> = {

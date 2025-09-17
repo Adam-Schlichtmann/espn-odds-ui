@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { FilterOption, SortOption, UsableListProps } from "./UsableList.types";
 
 const generateFilterOptions = <D, F extends string>(
@@ -18,6 +18,7 @@ const generateFilterOptions = <D, F extends string>(
 const UsableList = <D, S extends string, F extends string>({
   children,
   data,
+  defaultSort,
   filterOptions,
   getFilterValue,
   getSearchKeywords,
@@ -25,14 +26,14 @@ const UsableList = <D, S extends string, F extends string>({
   maxSortDepth = 2,
   sortOptions,
 }: UsableListProps<D, S, F>) => {
-  const [selectedSortOptions, setSelectedSortOptions] = useState<
-    SortOption<S>[]
-  >([]);
+  const [selectedSortOptions, setSelectedSortOptions] =
+    useState<SortOption<S>[]>(defaultSort);
   const [selectedFilterOptions, setSelectedFilterOptions] = useState<
     FilterOption<F>[]
   >(filterOptions.map((title) => ({ title, options: [] })));
   const [searchText, setSearchText] = useState("");
   const [searchSubmitted, setSearchSubmitted] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Filtering
   let filteredData = data.filter((datum) => {
@@ -100,7 +101,7 @@ const UsableList = <D, S extends string, F extends string>({
 
   return (
     <div>
-      <form onSubmit={handleSearch} className="mb-4 flex gap-2">
+      <form onSubmit={handleSearch} className="mb-4 flex gap-2 items-center">
         <input
           type="text"
           value={searchText}
@@ -114,6 +115,27 @@ const UsableList = <D, S extends string, F extends string>({
         >
           Search
         </button>
+        <button
+          type="button"
+          className="ml-2 p-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
+          aria-label="Open filters and sort"
+          onClick={() => setModalOpen(true)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 6.75h16.5M6.75 12h10.5m-7.5 5.25h4.5"
+            />
+          </svg>
+        </button>
         {searchSubmitted && (
           <button
             type="button"
@@ -124,86 +146,112 @@ const UsableList = <D, S extends string, F extends string>({
           </button>
         )}
       </form>
-      {/* Filter Options Section */}
-      <div className="mb-4 flex flex-wrap gap-4">
-        {availableFilterOptions.map((filter) => (
-          <div key={filter.title} className="flex flex-col">
-            <span className="font-medium mb-1">{filter.title}</span>
-            <div className="flex flex-wrap gap-1">
-              {filter.options.map((option) => (
-                <label key={option} className="flex items-center gap-1">
-                  <input
-                    type="checkbox"
-                    checked={
-                      selectedFilterOptions
-                        .find((f) => f.title === filter.title)
-                        ?.options.includes(option) || false
-                    }
-                    onChange={() => handleFilterChange(filter.title, option)}
-                  />
-                  <span>{option}</span>
-                </label>
-              ))}
+
+      {/* Modal for filters and sort */}
+      {modalOpen && (
+        <div className="fixed inset-y-0 right-0 z-50 flex">
+          {/* Drawer/Modal only, no overlay */}
+          <div
+            className="relative bg-white dark:bg-gray-900 shadow-xl h-full w-full sm:w-[400px] sm:ml-auto sm:rounded-l-lg transition-all duration-300 flex flex-col"
+            style={{ maxWidth: "100vw" }}
+          >
+            <button
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none z-10"
+              aria-label="Close filters and sort"
+              onClick={() => setModalOpen(false)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <div className="p-6 overflow-y-auto flex-1">
+              <h3 className="text-lg font-semibold mb-4">Filters</h3>
+              {/* Filter Options Section */}
+              <div className="mb-8 flex flex-wrap gap-4">
+                {availableFilterOptions.map((filter) => (
+                  <div key={filter.title} className="flex flex-col">
+                    <span className="font-medium mb-1">{filter.title}</span>
+                    <div className="flex flex-wrap gap-1">
+                      {filter.options.map((option) => (
+                        <label key={option} className="flex items-center gap-1">
+                          <input
+                            type="checkbox"
+                            checked={
+                              selectedFilterOptions
+                                .find((f) => f.title === filter.title)
+                                ?.options.includes(option) || false
+                            }
+                            onChange={() =>
+                              handleFilterChange(filter.title, option)
+                            }
+                          />
+                          <span>{option}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <h3 className="text-lg font-semibold mb-4">Sort</h3>
+              {/* Sort Options Section as radio group */}
+              <div className="mb-4 flex flex-col gap-4">
+                <div className="flex flex-col gap-4 text-left">
+                  {sortOptions.map((title) => (
+                    <label key={title} className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="sort-key"
+                        value={title}
+                        checked={selectedSortOptions[0]?.title === title}
+                        onChange={() => {
+                          setSelectedSortOptions((prev) => [
+                            {
+                              title: title as S,
+                              ascending: prev[0]?.ascending ?? true,
+                            },
+                          ]);
+                        }}
+                      />
+                      <p>{title}</p>
+                    </label>
+                  ))}
+                  <button
+                    type="button"
+                    className="px-2 py-1 bg-gray-200 rounded flex items-center gap-1"
+                    onClick={() => {
+                      setSelectedSortOptions((prev) => [
+                        {
+                          ...prev[0],
+                          ascending: !(prev[0]?.ascending ?? true),
+                        },
+                      ]);
+                    }}
+                    aria-label="Toggle sort direction"
+                    disabled={!selectedSortOptions[0]}
+                  >
+                    {selectedSortOptions[0]?.ascending ?? true
+                      ? "↑ Asc"
+                      : "↓ Desc"}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        ))}
-      </div>
-      {/* Sort Options Section */}
-      <div className="mb-4 flex flex-wrap items-center gap-6">
-        {selectedSortOptions.map(
-          (sort, index): ReactNode => (
-            <div className="flex items-center gap-2" key={index}>
-              <select
-                className="px-2 py-1 border rounded"
-                value={sort.title || ""}
-                onChange={(e) => {
-                  const newTitle = e.target.value;
-                  setSelectedSortOptions((prev) =>
-                    prev
-                      .map((item, i) =>
-                        index === i
-                          ? {
-                              title: newTitle as S,
-                              ascending: item.ascending ?? true,
-                            }
-                          : item
-                      )
-                      .slice(0, maxSortDepth)
-                  );
-                }}
-              >
-                {sortOptions.map((title) => (
-                  <option
-                    key={title}
-                    value={title}
-                    disabled={
-                      index > 0 && selectedSortOptions[1]?.title === title
-                    }
-                  >
-                    {title}
-                  </option>
-                ))}
-              </select>
-              <button
-                type="button"
-                className="px-2 py-1 bg-gray-200 rounded flex items-center gap-1"
-                onClick={() => {
-                  setSelectedSortOptions((prev) =>
-                    prev.map((item, i) =>
-                      index === i
-                        ? { ...item, ascending: !item.ascending }
-                        : item
-                    )
-                  );
-                }}
-                aria-label="Toggle primary sort direction"
-              >
-                {selectedSortOptions[0]?.ascending ?? true ? "↑ Asc" : "↓ Desc"}
-              </button>
-            </div>
-          )
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Render children (list) */}
       {children({
         clearSearch,
         data: filteredData,
