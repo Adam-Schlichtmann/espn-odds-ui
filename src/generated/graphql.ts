@@ -35,7 +35,7 @@ export type Athlete = {
   position_abbreviation: Scalars['String']['output'];
   position_id: Scalars['String']['output'];
   position_name: Scalars['String']['output'];
-  propBets: Array<PropBet>;
+  propBets?: Maybe<Array<PropBet>>;
   short_name: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   sport: Scalars['String']['output'];
@@ -65,7 +65,7 @@ export type Event = {
   id: Scalars['ID']['output'];
   league: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  propBets: Array<PropBet>;
+  propBets?: Maybe<Array<PropBet>>;
   season?: Maybe<Scalars['Int']['output']>;
   season_type?: Maybe<Scalars['Int']['output']>;
   short_name?: Maybe<Scalars['String']['output']>;
@@ -152,12 +152,12 @@ export type Team = {
   __typename?: 'Team';
   abbreviation: Scalars['String']['output'];
   alternate_color?: Maybe<Scalars['String']['output']>;
-  athletes: Array<Athlete>;
-  awayEvents: Array<Event>;
+  athletes?: Maybe<Array<Athlete>>;
+  awayEvents?: Maybe<Array<Event>>;
   color?: Maybe<Scalars['String']['output']>;
   created_at: Scalars['Date']['output'];
   display_name: Scalars['String']['output'];
-  homeEvents: Array<Event>;
+  homeEvents?: Maybe<Array<Event>>;
   id: Scalars['ID']['output'];
   is_active: Scalars['Boolean']['output'];
   is_all_star: Scalars['Boolean']['output'];
@@ -200,7 +200,7 @@ export type GetAthletesQueryVariables = Exact<{
 }>;
 
 
-export type GetAthletesQuery = { __typename?: 'Query', athletes: Array<{ __typename?: 'Athlete', id: string, age: number, birth_date: any, debut_year: number, display_name: string, first_name: string, height_display: string, height: number, jersey: string, last_name: string, league: string, position_abbreviation: string, position_id: string, position_name: string, short_name: string, slug: string, sport: string, status_id: string, status_name: string, team_id: string, weight_display: string, weight: number, created_at: any, updated_at: any }> };
+export type GetAthletesQuery = { __typename?: 'Query', athletes: Array<{ __typename?: 'Athlete', id: string, age: number, birth_date: any, debut_year: number, display_name: string, first_name: string, height_display: string, height: number, jersey: string, last_name: string, league: string, position_abbreviation: string, position_id: string, position_name: string, short_name: string, slug: string, sport: string, status_id: string, status_name: string, team_id: string, weight_display: string, weight: number, created_at: any, updated_at: any, team?: { __typename?: 'Team', id: string, display_name: string } | null }> };
 
 export type GetAthletesWithBetsQueryVariables = Exact<{
   athletesId?: InputMaybe<Scalars['ID']['input']>;
@@ -213,7 +213,7 @@ export type GetAthletesWithBetsQueryVariables = Exact<{
 }>;
 
 
-export type GetAthletesWithBetsQuery = { __typename?: 'Query', athletes: Array<{ __typename?: 'Athlete', id: string, age: number, birth_date: any, debut_year: number, display_name: string, first_name: string, height_display: string, height: number, jersey: string, last_name: string, league: string, position_abbreviation: string, position_id: string, position_name: string, short_name: string, slug: string, sport: string, status_id: string, status_name: string, team_id: string, weight_display: string, weight: number, created_at: any, updated_at: any, propBets: Array<{ __typename?: 'PropBet', id: string, league: string, sport: string, type_name: string, type_id: string, target_value?: number | null, odds_last_updated: any, over_american?: string | null, over_value?: number | null, under_american?: string | null, under_value?: number | null }> }> };
+export type GetAthletesWithBetsQuery = { __typename?: 'Query', athletes: Array<{ __typename?: 'Athlete', id: string, age: number, birth_date: any, debut_year: number, display_name: string, first_name: string, height_display: string, height: number, jersey: string, last_name: string, league: string, position_abbreviation: string, position_id: string, position_name: string, short_name: string, slug: string, sport: string, status_id: string, status_name: string, team_id: string, weight_display: string, weight: number, created_at: any, updated_at: any, propBets?: Array<{ __typename?: 'PropBet', id: string, league: string, sport: string, type_name: string, type_id: string, target_value?: number | null, odds_last_updated: any, over_american?: string | null, over_value?: number | null, under_american?: string | null, under_value?: number | null }> | null }> };
 
 export type GetEventsQueryVariables = Exact<{
   seasonType?: InputMaybe<Scalars['Int']['input']>;
@@ -240,7 +240,7 @@ export type GetEventsWithBetsQueryVariables = Exact<{
 }>;
 
 
-export type GetEventsWithBetsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, date: any, league: string, name: string, sport: string, short_name?: string | null, venue?: string | null, venue_address?: string | null, season?: number | null, season_type?: number | null, week?: number | null, created_at: any, updated_at: any, propBets: Array<{ __typename?: 'PropBet', id: string, league: string, sport: string, type_name: string, type_id: string, target_value?: number | null, odds_last_updated: any, over_american?: string | null, over_value?: number | null, under_american?: string | null, under_value?: number | null, athlete?: { __typename?: 'Athlete', display_name: string } | null, team?: { __typename?: 'Team', nickname?: string | null } | null }> }> };
+export type GetEventsWithBetsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, date: any, league: string, name: string, sport: string, short_name?: string | null, venue?: string | null, venue_address?: string | null, season?: number | null, season_type?: number | null, week?: number | null, created_at: any, updated_at: any, propBets?: Array<{ __typename?: 'PropBet', id: string, league: string, sport: string, type_name: string, type_id: string, target_value?: number | null, odds_last_updated: any, over_american?: string | null, over_value?: number | null, under_american?: string | null, under_value?: number | null, athlete?: { __typename?: 'Athlete', display_name: string } | null, team?: { __typename?: 'Team', nickname?: string | null } | null }> | null }> };
 
 export type GetTeamsQueryVariables = Exact<{
   teamsId?: InputMaybe<Scalars['ID']['input']>;
@@ -286,6 +286,10 @@ export const GetAthletesDocument = gql`
     weight
     created_at
     updated_at
+    team {
+      id
+      display_name
+    }
   }
 }
     `;

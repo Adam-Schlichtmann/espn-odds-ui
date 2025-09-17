@@ -36,5 +36,9 @@ query GetAthletes(
     weight
     created_at
     updated_at
+    team {
+      id
+      display_name
+    }
   }
 }
