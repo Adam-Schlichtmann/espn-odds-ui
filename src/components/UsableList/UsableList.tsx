@@ -98,8 +98,6 @@ const UsableList = <D, S extends string, F extends string>({
     getFilterValue
   );
 
-  console.log(selectedSortOptions);
-
   return (
     <div>
       <form onSubmit={handleSearch} className="mb-4 flex gap-2 items-center">
@@ -213,7 +211,7 @@ const UsableList = <D, S extends string, F extends string>({
                       <label key={title} className="flex items-center gap-2">
                         <input
                           type="radio"
-                          name="sort-key"
+                          name={`sort-key-${index}`}
                           value={title}
                           checked={sort.title === title}
                           onChange={() => {
